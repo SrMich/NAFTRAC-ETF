@@ -1,8 +1,5 @@
 # NAFTRAC-ETF
-Investment signal strategy on the NAFTRAC, is an ETF (Exchanged Traded Fund), which replicates the IPC (Index of the Mexican Stock Exchange).
-
-## What is an EFT?
-Investing in an ETF is an investment way that must be considered within an investment strategy. ETFs are investment funds that are stock exchange, it is a diversified way of investing that its benchmarking is a particular index, in the case of Naftrac it replicates the IPC, the most important ETF in the US, which is the SPY follows to the S&P500. It is a low cost investment with fewer tax obligations.
+Investment signal strategy on the NAFTRAC, is an ETF (Exchanged Traded Fund), which replicates the IPC (Index of the Mexican Stock Exchange). Investing in an ETF is an investment way that must be considered within an investment strategy. ETFs are investment funds that are stock exchange, it is a diversified way of investing that its benchmarking is a particular index, in the case of Naftrac it replicates the IPC. It is a low cost investment with fewer tax obligations.
 
 # Signal strategy to invest in NAFTRAC
 The buy and hold strategy is a passive strategy, since it consists of investing in an asset and maintaining the investment without any movement for a period of time, so that in the end a good return is expected for having waited a long time. It is a strategy that leaves very few benefits. The signal strategy takes the various investment instruments and their available information, continually updated to determine if the financial markets are going up or down; If the markets are on the upside, keep our investment on the asset of interest, and sell the asset at the time that the markdown goes down to obtain good returns.
@@ -13,7 +10,7 @@ So our equation is as follows:
 
  **Y =&beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub>+&beta;<sub>2</sub>X<sub>2</sub>+&beta;<sub>3</sub>X<sub>3</sub>+...+ &epsilon;**
  
-The index information is obtained from Yahoo Finance, through the following library's: `from pandas_datareader import data as pdr`, `pd.core.common.is_list_like = pd.api.types.is_list_like`. Con estas bibliotecas podemos obtener la informacion de todos nuestros predictores, excepto FTSE Index.
+The index information is obtained from Yahoo Finance, through the following library's: `from pandas_datareader import data as pdr`, `pd.core.common.is_list_like = pd.api.types.is_list_like`. With these libraries we can obtain the information of all our predictors, except the FTSE Index.
 To import the London FTSE Index, it is only available `yfinance` package, unfortunately, it is a library that gives us the information with a single decimal, so we will have a bias with the information.
 We use other libraries like `pandas`, `numpy`,` statsmodels.formula.api` for our math operations, matrices, regressions, estimating statistics.
 
@@ -22,7 +19,7 @@ Our equation can be established as follows
 
 **_Y_=b<sub>0</sub>+b<sub>1</sub>x<sub>1</sub>+b<sub>2</sub>x<sub>2</sub>+b<sub>3</sub>x<sub>3</sub>+...+b<sub>10</sub>x<sub>10</sub>+e**
 
-Where _Y_ is our response variable is tomorrow's NAFTRAC price minus today's opening price. Our predictors, explanatory variables **x <sub>1</sub>,x<sub>2</sub>,x<sub>3</sub>+...+x<sub>10</sub>** are 8 indexes, a commodity and a currency. With our model we seek to make a prediction in the morning, as soon as the Mexican Stock Exchange opens, to determine if we are in a short or long position. Of our 8 indices, a commodity and a currency that are our predictors, we cannot use the information available after they have opened the BMV.
+Where _Y_ is our response variable is tomorrow's NAFTRAC price minus today's opening price. Our predictors, explanatory variables **x <sub>1</sub>,x<sub>2</sub>,x<sub>3</sub>+...+x<sub>10</sub>** are 8 indexes, a commodity and a currency. With our model we seek to make a prediction in the morning, as soon as the Mexican Stock Exchange opens, to determine if we are in a short or long position. We cannot use the information available after they have opened the BMV.
 
 ## Indixes Panel
 For what we have to use for the Mexican market, as USA market, we will use today's opening price minus yesterday's. Our predictors can be classified into 3 groups. We use the information that Yahoo Finance gives us about the Mexican peso. In the first group will be the markets of Mexico and the US, which will give us information one day late.
@@ -67,7 +64,6 @@ We split the data into two parts, we named them `Train` and `Test` respectively.
 ```python
 Train = Panel_Indices.iloc[-2400:-1200, :]
 Test = Panel_Indices.iloc[-1200: , :]
-print(Train.shape, Test.shape)
 ```
 
 ## Correlation
@@ -97,7 +93,6 @@ We can see that the Asian markets have a greater relationship, because the infor
 ## OLS Method
 We use OLS method of `statsmodels` to build multiple linear equation model.
 ```python
-formula = 'Naftrac~Naf_A+IPC+Nasdaq+SP500+DJI+FTSE+HSI+Nikkei+AORD'
 lm = smf.ols(formula=formula, data=Train).fit()
 lm.summary()
 ```
@@ -134,10 +129,6 @@ Prob(Omnibus):                  0.000   Jarque-Bera (JB):              787.985
 Skew:                           0.238   Prob(JB):                    7.78e-172
 Kurtosis:                       6.941   Cond. No.                     4.12e+03
 ==============================================================================
-Warnings:
-[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The condition number is large, 4.12e+03. This might indicate that there are
-strong multicollinearity or other numerical problems.
 ```
 
 We analyze the information obtained, the first thing is *Prob(F-statistic):1.65e-10* F test is for overall significance of the multiple linear equation model.
