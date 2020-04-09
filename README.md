@@ -1,25 +1,30 @@
 # NAFTRAC-ETF
-Investment signal strategy on the NAFTRAC, is an ETF (Exchanged Traded Fund), which replicates the IPC (Index of the Mexican Stock Exchange). Investing in an ETF is an investment way that must be considered within an investment strategy. ETFs are investment funds that are stock exchange, it is a diversified way of investing that its benchmarking is a particular index, in the case of Naftrac it replicates the IPC. It is a low cost investment with fewer tax obligations.
+## What is an ETF?
+An ETF (exchange traded fund) is a diversified collection of assets (like a mutual fund) that trades on an exchange (like a stock). ETFs are traded on a stock exchange, just like stocks. Investors are drawn to ETFs because of their low price, tax efficiency and ease of trading.
+## What is Naftrac?
+NAFTRAC is an exchange traded fund (ETF) incorporated in Mexico. The Fund aims to hold all the common stocks of the Mexican Stock Exchange (IPC) Index, and is intended to replicate investment results that generally correspond to the price and yield performance of the IPC Index.
 
 # Signal strategy to invest in NAFTRAC
-The buy and hold strategy is a passive strategy, since it consists of investing in an asset and maintaining the investment without any movement for a period of time, so that in the end a good return is expected for having waited a long time. It is a strategy that leaves very few benefits. The signal strategy takes the various investment instruments and their available information, continually updated to determine if the financial markets are going up or down; If the markets are on the upside, keep our investment on the asset of interest, and sell the asset at the time that the markdown goes down to obtain good returns.
+## Buy and hold strategy VS Signal strategy
+### Buy and hold strategy
+Buy and hold is a passive investment strategy in which an investor buys stocks (or other types of securities such as ETFs) and holds them for a long period regardless of fluctuations in the market. It is a strategy that leaves very few benefits.
 
+### Signal strategy
+The signal strategy takes the various investment instruments and their available information, continually updated to determine if the financial markets are going up or down; If the markets are on the upside, keep our investment on the asset of interest, and sell the asset at the time that the markdown goes down to obtain good returns.
+
+## Our predictors
 We will use Indices of the main exchanges in America, Europe and Asia, which are strongly related. It will also allow us to have information in different time zones, which will allow us to have updated information.
-The *NAFTRAC* must replicate the index of the Mexican Stock Exchange, which is the *IPC*, we must also consider this as a predictor. The main indexes of the United States such as *S&P500*, *Nasdaq* provide us with information on the trend in the stock markets. In Europe, we take the *FTSE100* Index (Index of the London Stock Exchange) which is in operation at 3:00 a.m. - 11:30 a.m. The Asian indices that we take into account are the *Hang Seng* (HSE) of the Hong Kong stock exchange, *BSE Sensex* (BSE) of the Bombay, India stock exchange, and the *AORD* index of the Australian stock exchange, which are in operation at 8:00 pm - 3:00 am. Similarly, we consider oil as an explanatory variable, predictor, we take the reference prices of the American market, we consider *Oil* as an important variable because Mexico is an oil country, and a large part of its income is given by this commodity. Similarly, we consider the appreciation or depreciation of the *Mexican peso* against the US dollar.
-So our equation is as follows:
+The *NAFTRAC* must replicate the index of the Mexican Stock Exchange, which is the **IPC**, we must also consider this as a predictor. The main indexes of the United States such as **S&P500**, **Nasdaq** provide us with information on the trend in the stock markets. In Europe, we take the **FTSE100** Index (Index of the London Stock Exchange) which is in operation at 3:00 a.m. - 11:30 a.m. The Asian indices that we take into account are the **Hang Seng** (HSE) of the Hong Kong stock exchange, **BSE Sensex** (BSE) of the Bombay, India stock exchange, and the **AORD** index of the Australian stock exchange, which are in operation at 8:00 pm - 3:00 am. 
 
- **Y =&beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub>+&beta;<sub>2</sub>X<sub>2</sub>+&beta;<sub>3</sub>X<sub>3</sub>+...+ &epsilon;**
- 
-The index information is obtained from Yahoo Finance, through the following library's: `from pandas_datareader import data as pdr`, `pd.core.common.is_list_like = pd.api.types.is_list_like`. With these libraries we can obtain the information of all our predictors, except the FTSE Index.
-To import the London FTSE Index, it is only available `yfinance` package, unfortunately, it is a library that gives us the information with a single decimal, so we will have a bias with the information.
-We use other libraries like `pandas`, `numpy`,` statsmodels.formula.api` for our math operations, matrices, regressions, estimating statistics.
+Similarly, we consider oil as an explanatory variable, predictor, we take the reference prices of the American market, we consider **Oil** as an important variable because Mexico is an oil country, and a large part of its income is given by this commodity. Similarly, we consider the appreciation or depreciation of the **mexican currency** against the US dollar.
+
 
 # Multiple Linear Regression Model
 Our equation can be established as follows
 
 **_Y_=b<sub>0</sub>+b<sub>1</sub>x<sub>1</sub>+b<sub>2</sub>x<sub>2</sub>+b<sub>3</sub>x<sub>3</sub>+...+b<sub>10</sub>x<sub>10</sub>+e**
 
-Where _Y_ is our response variable is tomorrow's NAFTRAC price minus today's opening price. Our predictors, explanatory variables **x <sub>1</sub>,x<sub>2</sub>,x<sub>3</sub>+...+x<sub>10</sub>** are 8 indexes, a commodity and a currency. With our model we seek to make a prediction in the morning, as soon as the Mexican Stock Exchange opens, to determine if we are in a short or long position. We cannot use the information available after they have opened the BMV.
+Where _Y_ is our response variable is tomorrow's NAFTRAC price minus today's opening price. With our model we seek to make a prediction in the morning, as soon as the Mexican Stock Exchange opens, to determine if we are in a short or long position. We cannot use the information available after they have opened the BMV.
 
 ## Indixes Panel
 For what we have to use for the Mexican market, as USA market, we will use today's opening price minus yesterday's. Our predictors can be classified into 3 groups. We use the information that Yahoo Finance gives us about the Mexican peso. In the first group will be the markets of Mexico and the US, which will give us information one day late.
@@ -54,17 +59,11 @@ Date
 2020-03-19  0.240002 -0.510002  -530.339844   94.130371  -43.020020 -214.3 -512.250000   44.899902   514.871094 -4.480000  0.679399  35.349998     
 2020-03-20 -0.830002  0.240002  -281.722656  251.619629   38.459961   71.0  657.730469   44.899902  1455.140625  2.770000  0.389101  35.590000     
 2020-03-23 -0.309998 -0.830002  -803.398438 -400.790039 -141.229980   39.2    0.000000  189.199707 -1627.560547  0.049999  0.706799  34.759998     
-2020-03-24  0.139999 -0.309998 -1142.921875  348.870117   53.729980 -196.9  165.919922  252.900391  -382.201172  1.430000  0.563601  34.450001     
-2020-03-25  0.139999  0.139999  1209.199219  225.209961  113.330078  452.1  271.279297  129.000000  2035.968750  0.690001 -0.542500  34.590000 
 ```
 The variable `Naf_A` is the Naftrac data used one day lag.
 
 ### Split Data
 We split the data into two parts, we named them `Train` and `Test` respectively. With `Train` is for building the model and `Test` part is for testing model to see if the model can still make reasonable prediction in this dataset.
-```python
-Train = Panel_Indices.iloc[-2400:-1200, :]
-Test = Panel_Indices.iloc[-1200: , :]
-```
 
 ## Correlation
 If we check the scatterplots, which will response NAFTRAC with other ten predictors, there is no expliciit pattern, which is evidence of high noisy properties of stock markets.
@@ -92,10 +91,6 @@ We can see that the Asian markets have a greater relationship, because the infor
 
 ## OLS Method
 We use OLS method of `statsmodels` to build multiple linear equation model.
-```python
-lm = smf.ols(formula=formula, data=Train).fit()
-lm.summary()
-```
 
 ```
                             OLS Regression Results
@@ -153,12 +148,6 @@ Summary table list also list the _P value_ for the train of the significance of 
 We know that _p value_ if our predictors are significant, we see that  the NAF_A, IPC, AORD and SP500, that means all others predictors are useless information of Naftrac. It may be because of multicollinearity.Also the Mexican currency has a high relationship with the IPC and the Naftrac, given that these instruments are very sensitive to the appreciation of the dollar, given that the US is its main trading partner. This generates a high multicollinearity. Multicollinearity refers to a situation in which two or more predictors in the multiple regression model are highly, linearly related. All indices of different markets are correlated. Multicollinearity does not reduce predictive power. In fact our model has a problem of strong multicollinearity between the IPC and Naf_A predictors, this is because the EFT follows, it replicates the IPC.
 
 ## Making Prediction
-Now we can predict daily change of *Naftrac* using mmesagge predict of our model _lm_.
-
-```python
-Train['PredictedY'] = lm.predict(Train)
-Test['PredictedY'] = lm.predict(Test)
-```
 We predict NAFTRAC in both _train_ and _test_, We can see the scatterplot between the Train and Test daily change, and predict the NAFTRAC daily change. 
 It does have positive correlation although no very strong. Considering it is daily change, this result is not very band
 
@@ -170,8 +159,8 @@ This statistic is to measure the prediction error.
 
 <img src = "https://github.com/SrMich/NAFTRAC-ETF/blob/master/Images/RMSE.png" width="250">
 
-The second is adjusted R-square. In simple Linear Regression, we use R-square to get the percentage of variation that can be explained by a model. 
-We found that by adding more predictors the askew is always increasing but the accurracy is even worse. To compensate the effects of numbers predictors, we have adjusted R-square, which measures percentage of variation of a response that is explained by the model. 
+
+Adjusted R-square, which measures percentage of variation of a response that is explained by the model. 
 We compared to R^2 and RMSE between train and test and we check whether they are different dramatically. If so, this called overfitting.
 We compute R-squared and RMSE in our model.
 
@@ -183,7 +172,7 @@ We compute R-squared and RMSE in our model.
 RMSE and adjusted R^2 is much better in train than in test dataset. RMSE increase in test which is a bit worse than tha in the train. Our model is not overfitted. Our R^2 is only 7.19% percent, which is quite low, but in stock market it's not that bad.
 
 # Evaluate the strategy
-Now we will use predict price change of Naftrac as trading signal and then perform a simple strategy. If the signal is positive, we are *Long*. Otherwise, we are *Short*.
+Now we will use predict price change of Naftrac as trading signal and then perform a simple strategy. If the signal is positive, we are **Long**. Otherwise, we are **Short**.
 
 ## Profit of Signal-Based Strategy (Train data)
 First, we will compute a position of our trading based on our predicted value of a response. `Order=1` if predicted value is positive or our prediction for price change is positive for opening today to opening tomorrow. 
@@ -207,8 +196,6 @@ Then , we can compare the performance of this strategy, which we call the signal
 Similarly, we can view it as trading in test dataset.
 
 ```python
-Test['Order'] = [1 if sig>0 else -1 for sig in Test['PredictedY']]
-Test['Profit'] = Test['Naftrac'] * Test['Order']
 Test['Wealth'] = Test['Profit'].cumsum()
 print('Total Profit (Test): ', Test['Profit'].sum())
 
@@ -231,16 +218,8 @@ Average daily return is amirror we can make comparison in Finance Industry when 
 
 <img src = "https://github.com/SrMich/NAFTRAC-ETF/blob/master/Images/SharpeRatio.png" width="500">
 
-We compute the Sharpe Ratio, we first need to revise wealth process by including initial investment which is the price of one share of Naftrac.
+We compute the Sharpe Ratio
 
-```python
-Train['Wealth'] = Train['Wealth'] + Train.loc[Train.index[0], 'Price']
-Test['Wealth'] = Test['Wealth'] + Test.loc[Test.index[0], 'Price']
-Test['Return'] = np.log(Test['Wealth']) - np.log(Test['Wealth'].shift(1))
-RendDailyTest = Test['Return'].dropna()
-SharpeRatioTest = RendDailyTest.mean()/RendDailyTest.std(ddof=1)
-SharpeRatioTest_Anual = np.sqrt(252)*RendDailyTest.mean()/RendDailyTest.std(ddof=1)
-```
 |                          | **Train**  |  **Test**|
 |--------------------------|:----------:|:---------|
 |**Daily Sharpe Ratio**    | 0.1552     | 0.2024   |
